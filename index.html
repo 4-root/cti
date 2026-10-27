@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#050505">
+    <title>#_4root | CTI | CVE — Cyber Threat Intelligence</title>
+
+    <meta name="description"
+          content="#_4root CTI | CVE — explorer de vulnerabilidades da comunidade #_4root. Pesquise por qualquer CVE ou produto, ameaças exploradas ativamente (KEV) e correlação interna em tempo real.">
+    <meta name="keywords"
+          content="CVE, CTI, cyber threat intelligence, vulnerabilidades, NVD, KEV, MITRE, EPSS, CVSS, exploit, segurança ofensiva, #_4root">
+    <meta name="author" content="#_4root Community">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <link rel="canonical" href="https://cti.4root.com.br/">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="#_4root">
+    <meta property="og:title" content="#_4root | CTI | CVE — Cyber Threat Intelligence">
+    <meta property="og:description"
+          content="Explorer de vulnerabilidades da comunidade #_4root — pesquise por qualquer CVE ou produto conhecido do mundo das CVEs.">
+    <meta property="og:url" content="https://cti.4root.com.br/">
+    <meta property="og:image" content="https://raw.githubusercontent.com/4-root/Files/refs/heads/main/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="pt_BR">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="#_4root | CTI | CVE — Cyber Threat Intelligence">
+    <meta name="twitter:description"
+          content="Explorer de vulnerabilidades da comunidade #_4root — pesquise por qualquer CVE ou produto conhecido do mundo das CVEs.">
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/4-root/Files/refs/heads/main/og-image.jpg">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "#_4root",
+      "url": "https://4root.com.br/",
+      "logo": "https://4root.com.br/static/favicon.png",
+      "sameAs": [
+        "https://discord.gg/Aw4F6qXS4N",
+        "https://www.linkedin.com/company/4root",
+        "https://www.youtube.com/@4rootcommunity",
+        "https://www.instagram.com/4root_community"
+      ],
+      "description": "Somos uma comunidade dedicada ao hacking ético, pentesting e cibersegurança."
+    }
+    </script>
+
+    <link rel="icon" type="image/png" href="static/favicon.png">
+    <link rel="stylesheet" href="static/css/4root.css?v=7">
+    <link rel="stylesheet" href="static/css/cti.css?v=7">
+</head>
+<body>
+    <div id="scroll-progress" aria-hidden="true"></div>
+    <div id="api-bar" aria-hidden="true"></div>
+
+    <!-- boot: tela de loading terminal -->
+    <div id="boot" aria-hidden="true">
+        <div class="boot-term">
+            <div class="boot-bar-top"><span></span><span></span><span></span></div>
+            <div class="boot-body">
+                <div class="boot-line" id="boot-line">root@4root:~$ cti --load <span class="muted">▮</span></div>
+                <div class="boot-track"><div class="boot-fill" id="boot-fill"></div></div>
+                <div class="boot-sub" id="boot-sub">conectando ao banco de threat intel…</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== NAVBAR OFICIAL 4root.com.br ===== -->
+    <header class="navbar" id="navbar">
+        <nav class="nav-inner">
+            <a href="#home" class="nav-logo" aria-label="#_4root cti"><span class="font-qb text-hash">#</span><span class="font-qb text-underscore">_</span><span class="neon-text font-sora text-4">4</span><span class="font-qb text-root">root</span></a>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="#explorer" class="nav-link" data-section="explorer">Explorer<span class="underline"></span></a></li>
+                <li><a href="#correlacao" class="nav-link" data-section="correlacao">Correlação<span class="underline"></span></a></li>
+                <li><a href="#dashboard" class="nav-link" data-section="dashboard">Dashboard<span class="underline"></span></a></li>
+                <li class="nav-drop">
+                    <button type="button" class="nav-link nav-drop-btn" aria-haspopup="true" aria-expanded="false">Produtos<svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg><span class="underline"></span></button>
+                    <div class="nav-drop-menu" role="menu">
+                        <a href="https://academy.4root.com.br" role="menuitem" data-text="Academy">Academy</a>
+                        <a href="https://news.4root.com.br" role="menuitem" data-text="News">News</a>
+                        <a href="#home" role="menuitem" class="active" data-text="CTI | CVE">CTI | CVE</a>
+                    </div>
+                </li>
+                <li><a href="https://4root.com.br/#contato" class="nav-link">Contato<span class="underline"></span></a></li>
+            </ul>
+            <div class="nav-actions" style="display:flex;align-items:center;gap:.6rem;">
+                <button type="button" class="omni-trigger" id="omni-trigger" aria-label="Buscar (Ctrl+K)">
+                    <svg class="ic" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.5-4.5"/></svg>
+                    <span class="ot-label cti-mono">buscar</span>
+                    <span class="ot-kbd cti-mono">Ctrl K</span>
+                </button>
+                <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="4" x2="20" y1="12" y2="12"></line>
+                        <line x1="4" x2="20" y1="6" y2="6"></line>
+                        <line x1="4" x2="20" y1="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <div class="mobile-menu-overlay" id="mobile-menu">
+        <a href="#explorer">Explorer</a>
+        <a href="#correlacao">Correlação</a>
+        <a href="#dashboard">Dashboard</a>
+        <span class="mobile-menu-label">// produtos</span>
+        <a href="https://academy.4root.com.br">Academy</a>
+        <a href="https://news.4root.com.br">News</a>
+        <a href="#home" class="active">CTI | CVE</a>
+        <a href="https://4root.com.br/#contato">Contato</a>
+        <div class="mobile-menu-socials" aria-label="Redes da comunidade">
+      <a href="https://discord.gg/Aw4F6qXS4N" target="_blank" rel="noopener noreferrer" aria-label="Discord">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 12a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm8 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm-3.54 5.61c-3.22.96-6.22.88-8.92 0-.5-.15-.83.42-.56.86a7.54 7.54 0 0 0 5.02 2.75 7.54 7.54 0 0 0 5.02-2.75c.27-.44-.06-1.01-.56-.86Z"></path>
+          <path d="M18.5 3h-13A2.5 2.5 0 0 0 3 5.5v13A2.5 2.5 0 0 0 5.5 21h13a2.5 2.5 0 0 0 2.5-2.5v-13A2.5 2.5 0 0 0 18.5 3Z"></path>
+        </svg>
+      </a>
+      <a href="https://www.youtube.com/@4rootcommunity" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"></path>
+          <path d="m10 15 5-3-5-3z"></path>
+        </svg>
+      </a>
+      <a href="https://www.linkedin.com/company/4root" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+          <rect x="2" y="9" width="4" height="12"></rect>
+          <circle cx="4" cy="4" r="2"></circle>
+        </svg>
+      </a>
+      <a href="https://www.instagram.com/4root_community" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+          <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
+        </svg>
+      </a>
+    </div>
+    </div>
+
+    <main>
+    <!-- ===== HERO (padrão oficial 4root: particle canvas + glitch + scanlines) ===== -->
+    <section id="home" class="hero-section scanlines">
+      <canvas id="particle-canvas"></canvas>
+      <div class="hero-gradient"></div>
+      <div class="hero-content">
+
+        <div class="hero-status">
+          <span class="dot neon-glow caret-blink"></span>
+          <span id="typewriter"></span>
+        </div>
+
+        <h1 class="hero-title glitch" data-text="threat intel">
+          <span class="line">
+            <span class="line-inner" data-text="threat intel" style="font-family:'Ubuntu',sans-serif;">threat intel</span>
+          </span>
+          <span class="line">
+            <span class="line2-inner" data-text="#_4root">
+              <span class="font-qb text-hash">#</span><span class="font-qb text-underscore">_</span>
+              <span class="neon-text font-sora text-4">4</span>
+              <span class="font-qb text-root">root</span>
+            </span>
+          </span>
+        </h1>
+
+        <div class="hero-motto">
+          <span class="motto-bracket">[</span>
+          observe <span class="neon-text">//</span> detect <span class="neon-text">//</span> respond
+          <span class="motto-bracket">]</span>
+        </div>
+
+        <div class="hero-ctas">
+          <a href="#explorer" class="cta-primary glitch" data-text="explorar cves">explorar cves</a>
+          <a href="#dashboard" class="cta-secondary">ver dashboard</a>
+        </div>
+      </div>
+
+      <a href="#explorer" class="hero-scroll-indicator bounce-arrow" aria-label="ir ao explorer">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 5v14"></path>
+          <path d="m19 12-7 7-7-7"></path>
+        </svg>
+      </a>
+    </section>
+
+    <!-- ===== EXPLORER // SLIDE CVE ⇄ KEV (filtros fixos + setas < >) ===== -->
+    <section class="section" id="explorer">
+      <div class="section-inner">
+        <div class="section-label">
+          <span class="label-bar"></span> explorer
+        </div>
+
+        <div class="slide-head">
+          <h2 class="section-title" id="slide-title">Explorar CVEs</h2>
+          <div class="slide-nav">
+            <div class="slide-nav-row">
+              <div class="slide-arrows">
+                <button type="button" class="slide-arrow" id="ar-prev" aria-label="painel anterior" title="painel anterior (←)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                </button>
+                <button type="button" class="slide-arrow" id="ar-next" aria-label="próximo painel" title="próximo painel (→)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                </button>
+              </div>
+              <div class="slide-tabs" id="slide-tabs">
+                <button type="button" class="slide-tab active" data-panel="0">01 <span class="st-sep">//</span> explorar cves</button>
+                <button type="button" class="slide-tab" data-panel="1">02 <span class="st-sep red">//</span> exploração ativa kev</button>
+              </div>
+            </div>
+            <div class="slide-dots" id="slide-dots" aria-hidden="true">
+              <span class="sdot active" data-panel="0"></span><span class="sdot" data-panel="1"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- painel de filtros fixo (sticky) — governa os dois slides -->
+        <div class="filter-dock" id="filter-dock">
+          <div class="search-lg">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.5-4.5"/></svg>
+            <input type="text" id="fx-q" placeholder="2026-30707 · CVE-2024-3400 · wordpress · fortigate…" autocomplete="off">
+            <button class="go" id="fx-go">buscar</button>
+          </div>
+          <div class="sel-wrap"><select id="fx-days" title="publicado em">
+            <option value="1">últimas 24h</option>
+            <option value="7">últimos 7 dias</option>
+            <option value="30" selected>últimos 30 dias</option>
+            <option value="90">últimos 90 dias</option>
+            <option value="365">último ano</option>
+            <option value="1825">últimos 5 anos</option>
+            <option value="0">todo o período</option>
+          </select></div>
+          <div class="sel-wrap"><select id="fx-sev" title="severidade mínima">
+            <option value="">todas severidades</option>
+            <option value="CRITICAL">críticas (9+)</option>
+            <option value="HIGH">altas (7+)</option>
+            <option value="MEDIUM">médias (4+)</option>
+            <option value="LOW">baixas</option>
+          </select></div>
+          <div class="sel-wrap"><select id="fx-order" title="ordenar">
+            <option value="new">mais recentes</option>
+            <option value="old">mais antigas</option>
+            <option value="score">maior score</option>
+            <option value="epss">maior risco epss</option>
+          </select></div>
+          <div class="sel-wrap"><select id="fx-per" title="por página">
+            <option value="12">12 / pág</option>
+            <option value="24" selected>24 / pág</option>
+            <option value="48">48 / pág</option>
+          </select></div>
+        </div>
+        <div class="dock-active" id="fx-active"></div>
+
+        <!-- slider estilo android: CVE ⇄ KEV (navegação pelas setas do cabeçalho,
+             tabs, arraste ou teclado — sem botões flutuando sobre os cards) -->
+        <div class="slider-viewport" id="slider">
+          <div class="slider-track" id="slider-track">
+            <!-- SLIDE 01 · CVEs -->
+            <div class="slide-panel" data-panel="0">
+              <div class="results-head">
+                <div class="results-count" id="cve-count"><span class="inline-note"><span class="dot"></span> consultando…</span></div>
+                <span class="panel-tag">nvd · sincronizado</span>
+              </div>
+
+              <!-- toolbar global de filtros (janela + severidades + KEV) -->
+              <div class="dash-toolbar" id="win-chips-toolbar" style="margin-bottom:.9rem;">
+                <div class="toolbar-group" id="win-chips">
+                  <button class="chip chip-win" data-days="1">24h</button>
+                  <button class="chip chip-win" data-days="7">7d</button>
+                  <button class="chip chip-win" data-days="30">30d</button>
+                  <button class="chip chip-win" data-days="90">90d</button>
+                  <button class="chip chip-win" data-days="365">1a</button>
+                </div>
+                <span class="toolbar-sep"></span>
+                <div class="toolbar-group" id="sev-chips">
+                  <button class="chip chip-sev" data-sev="CRITICAL">críticas <span class="chip-n" id="n-crit"></span></button>
+                  <button class="chip chip-sev" data-sev="HIGH">altas <span class="chip-n" id="n-high"></span></button>
+                  <button class="chip chip-sev" data-sev="MEDIUM">médias <span class="chip-n" id="n-med"></span></button>
+                  <button class="chip chip-sev" data-sev="LOW">baixas <span class="chip-n" id="n-low"></span></button>
+                </div>
+                <span class="toolbar-sep"></span>
+                <button class="chip chip-kev" id="chip-kev">exploradas (KEV)</button>
+              </div>
+
+              <div class="cards-grid" id="cve-list"></div>
+              <div class="pager" id="cve-pager"></div>
+            </div>
+
+            <!-- SLIDE 02 · KEV -->
+            <div class="slide-panel" data-panel="1">
+              <div class="results-head">
+                <div class="results-count" id="kev-count"><span class="inline-note"><span class="dot" style="background:#ff0040"></span> carregando catálogo KEV…</span></div>
+                <span class="panel-tag red" id="kev-catalog-tag">cisa kev</span>
+              </div>
+              <div class="kev-kpis" id="kev-kpis"></div>
+              <div class="cards-grid" id="kev-list"></div>
+              <div class="pager" id="kev-pager"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="swipe-hint cti-mono">// arraste para o lado, use as setas no topo ou as teclas ← →</div>
+      </div>
+    </section>
+
+    <!-- ===== DASHBOARD UNIFICADO (final da página) ===== -->
+    <section class="section" id="dashboard">
+      <div class="section-inner">
+        <div class="section-label">
+          <span class="label-bar"></span> dashboard unificado
+        </div>
+        <h2 class="section-title">Inteligência de ameaças</h2>
+        <p class="section-desc">Tudo reage aos filtros do explorer — janela, severidade e busca.
+          Clique nos gráficos para filtrar. Dados sincronizados automaticamente 2x por dia (12h · 00h).</p>
+
+        <div class="stat-grid" id="stat-grid" style="margin-top:1.6rem;">
+          <div class="stat-card accent" data-act="explorer"><div class="stat-value" id="st-total"><span class="sk sk-line" style="width:70%"></span></div><div class="stat-label">cves na janela</div></div>
+          <div class="stat-card red" data-act="crit"><div class="stat-value" id="st-crit"><span class="sk sk-line" style="width:60%"></span></div><div class="stat-label">críticas + altas</div></div>
+          <div class="stat-card" data-act="kev"><div class="stat-value" id="st-kev"><span class="sk sk-line" style="width:50%"></span></div><div class="stat-label">exploração ativa (KEV)</div></div>
+          <div class="stat-card yellow" data-act="epss"><div class="stat-value" id="st-epss"><span class="sk sk-line" style="width:60%"></span></div><div class="stat-label">risco de exploração (epss ≥ 50%)</div></div>
+          <div class="stat-card cyan"><div class="stat-value" id="st-avg"><span class="sk sk-line" style="width:40%"></span></div><div class="stat-label">score cvss médio</div></div>
+        </div>
+
+        <div class="chart-grid">
+          <div class="chart-card span-8">
+            <h3>timeline de publicações <span class="hint" id="tl-gran">por dia</span></h3>
+            <div class="chart" id="ch-timeline"><div class="sk sk-block"></div></div>
+          </div>
+          <div class="chart-card span-4">
+            <h3>severidade <span class="hint">clique filtra</span></h3>
+            <div class="chart" id="ch-sev"><div class="sk sk-block"></div></div>
+          </div>
+          <div class="chart-card span-4">
+            <h3>cvss — distribuição <span class="hint">clique filtra</span></h3>
+            <div class="chart" id="ch-cvss"><div class="sk sk-block"></div></div>
+          </div>
+          <div class="chart-card span-4">
+            <h3>vetor de ataque <span class="hint">cti — exposição</span></h3>
+            <div class="chart" id="ch-av"><div class="sk sk-block"></div></div>
+          </div>
+          <div class="chart-card span-4">
+            <h3>privilégios exigidos <span class="hint">cti — complexidade</span></h3>
+            <div class="chart" id="ch-pr"><div class="sk sk-block"></div></div>
+          </div>
+          <div class="chart-card span-6">
+            <h3>top cwe <span class="hint">clique filtra · role para ver todos</span></h3>
+            <div class="chart chart-sm" id="ch-cwe"><div class="sk sk-block"></div></div>
+          </div>
+          <div class="chart-card span-6">
+            <h3>exploração ativa por período (KEV)</h3>
+            <div class="chart chart-sm" id="ch-kevt"><div class="sk sk-block"></div></div>
+          </div>
+        </div>
+
+        <!-- ===== MÓDULO DE CORRELAÇÃO INTERNA // CVE × KEV ===== -->
+        <div class="corr-head" id="correlacao">
+          <div class="section-label">
+            <span class="label-bar" style="background:#ff0040"></span> correlação interna
+            <span class="section-tag red" id="corr-tag">cve × kev × ghsa</span>
+          </div>
+          <h2 class="section-title">Correlação <span style="color:#ff2b4e;">//</span> CVE × KEV</h2>
+          <p class="section-desc">Cruzamento interno do banco: quais vulnerabilidades viram exploração ativa,
+            em quanto tempo e em quais produtos. Só faz sentido olhando as duas bases juntas.</p>
+        </div>
+
+        <div class="corr-kpis">
+          <div class="corr-kpi">
+            <div class="ck-value" id="ck-rate"><span class="sk sk-line" style="width:55%"></span></div>
+            <div class="ck-label">das cves publicadas na janela já viraram exploração ativa</div>
+          </div>
+          <div class="corr-kpi">
+            <div class="ck-value red" id="ck-tte"><span class="sk sk-line" style="width:45%"></span></div>
+            <div class="ck-label">dias até exploração (média após publicação)</div>
+          </div>
+          <div class="corr-kpi">
+            <div class="ck-value" id="ck-rans"><span class="sk sk-line" style="width:50%"></span></div>
+            <div class="ck-label">entradas kev usadas em campanhas de ransomware</div>
+          </div>
+          <div class="corr-kpi">
+            <div class="ck-value cyan" id="ck-ghsa"><span class="sk sk-line" style="width:55%"></span></div>
+            <div class="ck-label">exploits públicos mapeados (github advisories)</div>
+          </div>
+        </div>
+
+        <div class="chart-grid">
+          <div class="chart-card span-6">
+            <h3>correlação temporal <span class="hint">publicações × entradas no kev</span></h3>
+            <div class="chart chart-sm" id="ch-corrdual"><div class="sk sk-block"></div></div>
+          </div>
+          <div class="chart-card span-6">
+            <h3>velocidade de exploração <span class="hint">dias até entrar no kev</span></h3>
+            <div class="chart chart-sm" id="ch-tte"><div class="sk sk-block"></div></div>
+          </div>
+          <div class="chart-card span-6">
+            <h3>produtos mais visados pelo kev <span class="hint">clique filtra · role para ver todos</span></h3>
+            <div class="chart chart-sm" id="ch-corrprod"><div class="sk sk-block"></div></div>
+          </div>
+          <div class="chart-card span-6">
+            <h3>fabricantes mais atingidos <span class="hint">clique filtra · role para ver todos</span></h3>
+            <div class="chart chart-sm" id="ch-corrvend"><div class="sk sk-block"></div></div>
+          </div>
+          <div class="chart-card span-6">
+            <h3>perfil de severidade <span class="hint">exploradas × não exploradas</span></h3>
+            <div class="chart chart-sm" id="ch-sevstack"><div class="sk sk-block"></div></div>
+          </div>
+          <div class="chart-card span-6">
+            <h3>ransomware <span class="hint">kev com uso conhecido</span></h3>
+            <div class="chart chart-sm" id="ch-rans"><div class="sk sk-block"></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+    </main>
+
+    <!-- ===== FOOTER OFICIAL ===== -->
+    <footer>
+      <div class="footer-bottom">
+        <div class="footer-bottom-inner">
+          <a href="#home" class="nav-logo footer-logo-link" aria-label="#_4root — voltar ao topo">
+            <span class="font-qb text-hash">#</span><span class="font-qb text-underscore">_</span>
+            <span class="neon-text font-sora text-4">4</span>
+            <span class="font-qb text-root">root</span>
+          </a>
+          <span class="footer-copyright">&copy; 2026 #_4root — comunidade de cibersegurança<br>
+            <span class="footer-cve-count" id="footer-count"></span></span>
+          <span class="footer-powered">dados: <a href="https://nvd.nist.gov" target="_blank" rel="noopener noreferrer">NVD</a>
+            · <a href="https://www.cisa.gov/kev" target="_blank" rel="noopener noreferrer">CISA KEV</a> ·
+            <a href="https://www.first.org/epss/" target="_blank" rel="noopener noreferrer">FIRST EPSS</a> ·
+            <a href="https://github.com/advisories" target="_blank" rel="noopener noreferrer">GitHub Advisories</a> ·
+            <a href="https://cveawg.mitre.org" target="_blank" rel="noopener noreferrer">MITRE</a></span>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ===== MODAL DETALHE CVE ===== -->
+    <div class="modal-backdrop" id="cve-modal">
+      <div class="modal" role="dialog" aria-modal="true">
+        <div class="modal-head">
+          <span class="rc-id" id="md-id">CVE</span>
+          <span id="md-badges" style="display:flex;gap:.4rem;flex-wrap:wrap;"></span>
+          <button class="modal-close" id="md-close" aria-label="fechar">✕</button>
+        </div>
+        <div class="modal-body" id="md-body">
+          <div class="modal-loading"><span class="spinner"></span> consultando intel…</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== OMNISEARCH CTRL+K ===== -->
+    <div class="omni-backdrop" id="omni">
+      <div class="omni-panel">
+        <div class="omni-input-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.5-4.5"/></svg>
+          <input type="text" id="omni-q" placeholder="buscar CVE, produto, fabricante…" autocomplete="off" spellcheck="false">
+          <span class="omni-hint">esc</span>
+        </div>
+        <div class="omni-results" id="omni-results">
+          <div class="omni-empty">digite para buscar — CVE ID, produto ou fabricante</div>
+        </div>
+        <div class="omni-foot">
+          <span><kbd>↑</kbd><kbd>↓</kbd> navegar</span>
+          <span><kbd>↵</kbd> abrir</span>
+          <span><kbd>esc</kbd> fechar</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="toast-zone"></div>
+
+    <script src="config.js"></script>
+    <script src="static/js/echarts.min.js"></script>
+    <script src="static/js/4root.fx.js"></script>
+    <script src="static/js/api.js"></script>
+    <script src="static/js/charts.js"></script>
+    <script src="static/js/app.js"></script>
+</body>
+</html>
